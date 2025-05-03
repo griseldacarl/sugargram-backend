@@ -1,0 +1,15 @@
+<div class="card w-100">
+  <span class="material-icons-outlined w-100">person</span>
+  <a href="{{url_for('signin')}}" class="btn btn-primary">Logout</a>
+
+  <div class="card-body">
+    <h5 class="card-title">{{current_user.displayName}}</h5>
+    <div
+      hx-get="/total-weight-lost-profile"
+      hx-swap="innerHTML"
+      hx-trigger="load"
+    >
+      Loading weight lost total....
+    </div>
+  </div>
+</div>

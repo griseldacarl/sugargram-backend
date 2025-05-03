@@ -1,0 +1,43 @@
+<div class="card w-100">
+  <div class="card-body">
+    <h5 class="card-title">Weight Summary</h5>
+    <canvas id="weightSummaryChart"></canvas>
+  </div>
+</div>
+<script>
+  async function fetchData() {
+    const response = await fetch("/weight-summary-data");
+    const data = await response.json();
+    return data;
+  }
+
+  async function createChart() {
+    const data = await fetchData();
+    const ctx = document.getElementById("weightSummaryChart").getContext("2d");
+    const myChart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: data.labels,
+        datasets: [
+          {
+            label: "Weights",
+            data: data.values,
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            borderColor: "rgba(75, 192, 192, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            min: 200,
+            max: 300,
+          },
+        },
+      },
+    });
+  }
+
+  createChart();
+</script>

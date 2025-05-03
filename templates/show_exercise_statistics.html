@@ -1,0 +1,20 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Exercise</th>
+      <th scope="col">Reps</th>
+      <th scope="col">Sets</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for exercise in exercises %}
+    <tr>
+      <td>{{exercise["Date"]}}</td>
+      <td>{{exercise["Exercise"]}}</td>
+      <td>{{exercise["Reps"]}}</td>
+      <td>{{exercise["Sets"]}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

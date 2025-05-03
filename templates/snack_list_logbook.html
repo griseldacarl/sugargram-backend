@@ -1,0 +1,45 @@
+<ul class="list-group">
+  {% for snack in snacklist%}
+  <li
+    class="list-group-item d-flex justify-content-between align-items-center"
+    key="{{snack.get('foodid')}}"
+  >
+    <div class="card" style="width: 18rem">
+      <div class="card-header">{{snack.get('name')}}</div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            Calories:<strong>{{snack.get('calories')}}</strong>
+          </li>
+          <li class="list-group-item">
+            Carbohydrates:<strong>{{snack.get('carbohydrates')}}</strong>
+          </li>
+          <li class="list-group-item">
+            Fats:<strong>{{snack.get('fats')}}</strong>
+          </li>
+          <li class="list-group-item">
+            Proteins:<strong>{{snack.get('protein')}}</strong>
+          </li>
+        </ul>
+      </div>
+      <button
+        hx-delete="/snack-list-logbook/delete/{{snack.get('foodid')}}"
+        hx-target="closest li"
+        type="button"
+        class="btn btn-secondary"
+      >
+        Delete
+      </button>
+    </div>
+  </li>
+  {% endfor %}
+  <button
+    hx-get="/snack-list-logbook/add-form"
+    hx-target="this"
+    hx-swap="outerHTML"
+    type="button"
+    class="btn btn-primary"
+  >
+    Add Snack
+  </button>
+</ul>

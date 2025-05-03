@@ -1,0 +1,26 @@
+<form
+  hx-post="/lunch-list-logbook/add"
+  hx-target="this"
+  hx-swap="outerHTML"
+  class="form-inline"
+>
+  <label class="my-1 mr-2" for="inlineFormCustomSelectPref"
+    >Select a food to add!</label
+  >
+  <select
+    name="lunchfoodselection"
+    class="custom-select my-1 mr-sm-2"
+    id="inlineFormCustomSelectPref"
+  >
+    <option selected>Choose...</option>
+    {% for food in foods%}
+    <option
+      value='{"name":"{{food.get("name")}}","weight":{{food.get("weight")}},"calories":{{food.get("calories")}},"protein":{{food.get("protein")}},"carbohydrates":{{food.get("carbohydrates")}},"fats":{{food.get("fats")}},"fiber":{{food.get("fiber")}},"sugars":{{food.get("sugars")}},"sodium":{{food.get("sodium")}} }'
+    >
+      {{food.get('name')}}
+    </option>
+    {% endfor %}
+  </select>
+
+  <button type="submit" class="btn btn-primary my-1">Add</button>
+</form>

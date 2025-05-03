@@ -1,0 +1,45 @@
+<ul class="list-group">
+  {% for lunch in lunchlist%}
+  <li
+    class="list-group-item d-flex justify-content-between align-items-center"
+    key="{{lunch.get('foodid')}}"
+  >
+    <div class="card" style="width: 18rem">
+      <div class="card-header">{{lunch.get('name')}}</div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            Calories:<strong>{{lunch.get('calories')}}</strong>
+          </li>
+          <li class="list-group-item">
+            Carbohydrates:<strong>{{lunch.get('carbohydrates')}}</strong>
+          </li>
+          <li class="list-group-item">
+            Fats:<strong>{{lunch.get('fats')}}</strong>
+          </li>
+          <li class="list-group-item">
+            Proteins:<strong>{{lunch.get('protein')}}</strong>
+          </li>
+        </ul>
+      </div>
+      <button
+        hx-delete="/lunch-list-logbook/delete/{{lunch.get('foodid')}}"
+        hx-target="closest li"
+        type="button"
+        class="btn btn-secondary"
+      >
+        Delete
+      </button>
+    </div>
+  </li>
+  {% endfor %}
+  <button
+    hx-get="/lunch-list-logbook/add-form"
+    hx-target="this"
+    hx-swap="outerHTML"
+    type="button"
+    class="btn btn-primary"
+  >
+    Add Lunch
+  </button>
+</ul>

@@ -1,0 +1,43 @@
+<div class="chart-container">
+  <canvas id="totalBloodSugarChart"></canvas>
+</div>
+<script>
+  async function fetchData() {
+    const response = await fetch("/totat-bloodsugar-data");
+    const data = await response.json();
+    return data;
+  }
+
+  async function createChart() {
+    const data = await fetchData();
+    const ctx = document
+      .getElementById("totalBloodSugarChart")
+      .getContext("2d");
+    const myChart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: data.labels,
+        datasets: [
+          {
+            label: "10 Most Recent BloodSugars",
+            data: data.values,
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            borderColor: "rgba(75, 192, 192, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            suggetedMin: 50,
+            suggetedMax: 250,
+          },
+        },
+      },
+    });
+  }
+
+  createChart();
+</script>

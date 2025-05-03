@@ -1,0 +1,618 @@
+<nav class="navbar bg-body-tertiary fixed-top"></nav>
+<div
+  id="main"
+  name="main"
+  class="container d-flex justify-content-center"
+  style="padding-top: 80px"
+  hx-get="/dashboard"
+  hx-swap="innerHTML"
+  hx-trigger="load"
+></div>
+
+<div class="w-100 fixed-bottom bg-dark">
+  <div
+    class="btn-group w-100"
+    role="group"
+    aria-label="Button group with nested dropdown"
+  >
+    <button
+      hx-get="/dashboard"
+      hx-target="#main"
+      hx-swap="innerHTML"
+      type="button"
+      class="btn btn-outline-secondary"
+    >
+      <span class="material-icons-outlined">dashboard</span>
+    </button>
+    <button
+      hx-get="/logbook"
+      hx-target="#main"
+      hx-swap="innerHTML"
+      type="button"
+      class="btn btn-outline-secondary"
+    >
+      <span class="material-icons-outlined">local_library</span>
+    </button>
+    <button
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasBottom"
+      aria-controls="offcanvasBottom"
+      class="btn btn-outline-secondary"
+    >
+      <span class="material-icons-outlined">add_circle</span>
+    </button>
+    <button
+      hx-get="/statistics"
+      hx-target="#main"
+      hx-swap="innerHTML"
+      type="button"
+      class="btn btn-outline-secondary"
+    >
+      <span class="material-icons-outlined">analytics</span>
+    </button>
+    <button
+      hx-get="/profile"
+      hx-target="#main"
+      hx-swap="innerHTML"
+      type="button"
+      class="btn btn-outline-secondary"
+    >
+      <span class="material-icons-outlined">person</span>
+    </button>
+  </div>
+</div>
+
+<div
+  class="offcanvas offcanvas-bottom"
+  tabindex="-1"
+  id="offcanvasBottom"
+  aria-labelledby="offcanvasBottomLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasBottomLabel">
+      <div class="grid" style="row-gap: 0">
+        <div class="g-col-6">
+          <a
+            class="btn btn-primary"
+            data-bs-toggle="offcanvas"
+            href="#offcanvasFood"
+            role="button"
+            aria-controls="offcanvasFood"
+          >
+            <span class="material-icons-outlined">add</span>
+            <span class="material-icons-outlined">restaurant</span>
+          </a>
+        </div>
+        <div class="g-col-6">
+          <a
+            class="btn btn-primary"
+            data-bs-toggle="offcanvas"
+            href="#offcanvasWeight"
+            role="button"
+            aria-controls="offcanvasFood"
+          >
+            <span class="material-icons-outlined">add</span
+            ><span class="material-icons-outlined">scale</span>
+          </a>
+        </div>
+        <div class="g-col-6">
+          <a
+            class="btn btn-primary"
+            data-bs-toggle="offcanvas"
+            href="#offcanvasWater"
+            role="button"
+            aria-controls="offcanvasWater"
+          >
+            <span class="material-icons-outlined">add</span
+            ><span class="material-icons-outlined">water_drop</span>
+          </a>
+        </div>
+        <div class="g-col-6">
+          <a
+            class="btn btn-primary"
+            data-bs-toggle="offcanvas"
+            href="#offcanvasExercise"
+            role="button"
+            aria-controls="offcanvasExercise"
+          >
+            <span class="material-icons-outlined">add</span
+            ><span class="material-icons-outlined">fitness_center</span>
+          </a>
+        </div>
+        <div class="g-col-6">
+          <a
+            class="btn btn-primary"
+            data-bs-toggle="offcanvas"
+            href="#offcanvasSleep"
+            role="button"
+            aria-controls="offcanvasSleep"
+          >
+            <span class="material-icons-outlined">add</span
+            ><span class="material-icons-outlined">bed</span>
+          </a>
+        </div>
+      </div>
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+</div>
+<!--                     FOOD START    -->
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="offcanvasFood"
+  aria-labelledby="offcanvasFoodLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasFoodLabel">Add Food</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <div>Please add your food using one of the options listed below:</div>
+
+    <div
+      hx-get="/add-food-form"
+      hx-target="this"
+      hx-swap="outerHTML"
+      hx-trigger="load"
+    >
+      Loading food list ...
+    </div>
+    <h1>OR</h1>
+    <div
+      hx-get="/add-food-prediction-form"
+      hx-target="this"
+      hx-swap="outerHTML"
+      hx-trigger="load"
+    ></div>
+  </div>
+</div>
+<!--                     FOOD END    -->
+<!--     Add Weight    -->
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="offcanvasWeight"
+  aria-labelledby="offcanvasWeightLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasWeightLabel">
+      Let's Add Your Weight
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+
+  <select
+    class="form-select form-select-lg mb-3"
+    aria-label="Large select example"
+    name="weightSelected"
+    id="weightSelected"
+    hx-trigger="change"
+    hx-get="/weight-range-update"
+    hx-swap="outerHTML"
+    hx-target="#weightOutput"
+  >
+    {% for i in range(150,300) %}
+    <option value="{{i}}">{{i}}</option>
+    {% endfor %}
+  </select>
+  <h1>Your current weight is:</h1>
+  <div id="weightOutput">
+    <svg viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg">
+      <style>
+        /* Note that the color of the text is set with the    *
+       * fill property, the color property is for HTML only */
+        .weightDisplay {
+          font: italic 40px serif;
+          fill: blue;
+        }
+      </style>
+      <text x="0" y="55" class="weightDisplay">150lbs</text>
+    </svg>
+    <svg
+      viewBox="0 0 200 150"
+      width="300"
+      height="225"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <style>
+        :root {
+          --weight: 200; /* Change this from 0 to 300 to adjust the dial */
+        }
+        .dial {
+          transform-origin: 100px 100px;
+          /* Fix: Adjusted calculation to distribute weight properly across 180° */
+          transform: rotate(calc(-90deg + (var(--weight) / 300 * 180deg)));
+        }
+        .scale-text {
+          font: 10px sans-serif;
+          fill: #444;
+          text-anchor: middle;
+        }
+        .scale-tick {
+          stroke: #333;
+          stroke-width: 2;
+        }
+        .dial-hand {
+          stroke: red;
+          stroke-width: 3;
+        }
+        /* Added for weight display */
+        .weight-display {
+          font: bold 14px sans-serif;
+          fill: #222;
+          text-anchor: middle;
+        }
+      </style>
+      <!-- Scale Outline -->
+      <circle
+        cx="100"
+        cy="100"
+        r="90"
+        fill="#f8f8f8"
+        stroke="#aaa"
+        stroke-width="2"
+      />
+      <path
+        d="M10,100 A90,90 0 0,1 190,100"
+        fill="#e0e0e0"
+        stroke="#999"
+        stroke-width="1"
+      />
+      <!-- Ticks and Labels (0 to 300 lbs in steps of 30) -->
+      <g id="ticks">
+        <g transform="rotate(-90 100 100)">
+          <!-- 11 ticks from 0 to 300 (each 30 lbs = 18deg) -->
+          <!-- 300 / 30 = 10 intervals → 180 / 10 = 18° apart -->
+          <g transform="rotate(0 100 100)">
+            <line x1="100" y1="15" x2="100" y2="25" class="scale-tick" />
+            <text x="100" y="12" class="scale-text">0</text>
+          </g>
+          <g transform="rotate(18 100 100)">
+            <line x1="100" y1="15" x2="100" y2="25" class="scale-tick" />
+            <text x="100" y="12" class="scale-text">30</text>
+          </g>
+          <g transform="rotate(36 100 100)">
+            <line x1="100" y1="15" x2="100" y2="25" class="scale-tick" />
+            <text x="100" y="12" class="scale-text">60</text>
+          </g>
+          <g transform="rotate(54 100 100)">
+            <line x1="100" y1="15" x2="100" y2="25" class="scale-tick" />
+            <text x="100" y="12" class="scale-text">90</text>
+          </g>
+          <g transform="rotate(72 100 100)">
+            <line x1="100" y1="15" x2="100" y2="25" class="scale-tick" />
+            <text x="100" y="12" class="scale-text">120</text>
+          </g>
+          <g transform="rotate(90 100 100)">
+            <line x1="100" y1="15" x2="100" y2="25" class="scale-tick" />
+            <text x="100" y="12" class="scale-text">150</text>
+          </g>
+          <g transform="rotate(108 100 100)">
+            <line x1="100" y1="15" x2="100" y2="25" class="scale-tick" />
+            <text x="100" y="12" class="scale-text">180</text>
+          </g>
+          <g transform="rotate(126 100 100)">
+            <line x1="100" y1="15" x2="100" y2="25" class="scale-tick" />
+            <text x="100" y="12" class="scale-text">210</text>
+          </g>
+          <g transform="rotate(144 100 100)">
+            <line x1="100" y1="15" x2="100" y2="25" class="scale-tick" />
+            <text x="100" y="12" class="scale-text">240</text>
+          </g>
+          <g transform="rotate(162 100 100)">
+            <line x1="100" y1="15" x2="100" y2="25" class="scale-tick" />
+            <text x="100" y="12" class="scale-text">270</text>
+          </g>
+          <g transform="rotate(180 100 100)">
+            <line x1="100" y1="15" x2="100" y2="25" class="scale-tick" />
+            <text x="100" y="12" class="scale-text">300</text>
+          </g>
+        </g>
+      </g>
+      <!-- Dial Needle -->
+      <line x1="100" y1="100" x2="100" y2="25" class="dial dial-hand" />
+      <!-- Center Pin -->
+      <circle cx="100" cy="100" r="4" fill="#000" />
+      <!-- Weight Display -->
+      <rect
+        x="70"
+        y="120"
+        width="60"
+        height="20"
+        rx="3"
+        fill="#e0e0e0"
+        stroke="#999"
+      />
+      <text x="100" y="135" class="weight-display">
+        <tspan id="weight-display-value">150</tspan>
+        lbs
+      </text>
+    </svg>
+  </div>
+
+  <hr class="w-100" />
+
+  <button
+    hx-get="/save-current-weight"
+    hx-target="this"
+    hx-include="[name='weightSelected']"
+    class="btn btn-primary"
+    type="button"
+  >
+    Save
+  </button>
+</div>
+
+<!--    Weight     -->
+<!-- Water-->
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="offcanvasWater"
+  aria-labelledby="offcanvasWaterLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasWaterLabel">Water</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <div>How you drank any more water today?.</div>
+    <select
+      class="form-select form-select-lg mb-3"
+      aria-label="Large select example"
+      name="waterSelected"
+      id="waterSelected"
+      hx-trigger="change"
+      hx-get="/save-total-water-comsumed-today"
+      hx-swap="outerHTML"
+      hx-target="#waterOutput"
+    >
+      {% for i in range(0,135) %}
+      <option value="{{i}}">{{i}}</option>
+      {% endfor %}
+    </select>
+    <div id="waterOutput">
+      You have consumed 0 <strong>ounces</strong>. That is on your way to
+      getting your daily requirement of 135 <strong> ounces</strong>.
+      <br />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 200 400"
+        width="200"
+        height="400"
+      >
+        <style>
+          svg {
+            --water-level: 0%; /* Change this value to adjust water level */
+          }
+
+          .water {
+            fill: rgba(52, 152, 219, 0.85);
+          }
+
+          .water-clip rect {
+            height: var(--water-level);
+            y: calc(380px - var(--water-level));
+            transition: height 0.3s, y 0.3s;
+          }
+        </style>
+
+        <!-- Bottle Shape for Clipping -->
+        <defs>
+          <clipPath id="bottleClip">
+            <path
+              d="M70,30 L70,10 C70,5 80,5 80,5 L120,5 C120,5 130,5 130,10 L130,30 L130,80 C130,80 150,100 150,120 L150,350 C150,370 130,380 130,380 L70,380 C70,380 50,370 50,350 L50,120 C50,100 70,80 70,80 Z"
+            />
+          </clipPath>
+        </defs>
+
+        <!-- Water fill (rect controlled by CSS variable) -->
+        <g clip-path="url(#bottleClip)">
+          <g class="water-clip">
+            <rect class="water" x="50" width="100" y="0" height="380" />
+          </g>
+        </g>
+
+        <!-- Bottle Body -->
+        <path
+          d="M70,30 L70,10 C70,5 80,5 80,5 L120,5 C120,5 130,5 130,10 L130,30 L130,80 C130,80 150,100 150,120 L150,350 C150,370 130,380 130,380 L70,380 C70,380 50,370 50,350 L50,120 C50,100 70,80 70,80 Z"
+          fill="rgba(220, 230, 240, 0.7)"
+          stroke="#555"
+          stroke-width="2"
+        />
+
+        <!-- Bottle Cap -->
+        <rect
+          x="80"
+          y="5"
+          width="40"
+          height="10"
+          fill="#2980b9"
+          stroke="#555"
+          stroke-width="1"
+        />
+
+        <!-- Optional Highlight -->
+        <path
+          d="M65,40 L70,40 L70,70 C70,70 60,75 60,85 L60,100"
+          stroke="rgba(255, 255, 255, 0.3)"
+          stroke-width="1"
+          fill="none"
+        />
+      </svg>
+    </div>
+    <a
+      hx-get="/add-water-to-database"
+      hx-include="#waterSelected"
+      class="btn btn-primary"
+      role="button"
+      >Save</a
+    >
+  </div>
+</div>
+<!-- End Water-->
+<!-- Exercise-->
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="offcanvasExercise"
+  aria-labelledby="offcanvasExerciseLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExerciseLabel">Exercise</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <div>What did you do for exercise today?</div>
+    <div
+      hx-get="/add-exercise-form"
+      hx-target="this"
+      hx-swap="outerHTML"
+      hx-trigger="load"
+    ></div>
+  </div>
+</div>
+<!-- End Execise-->
+<!-- Sleep-->
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="offcanvasSleep"
+  aria-labelledby="offcanvasSleepLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasSleepLabel">Sleep</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <div>How much sleep did you get last night?</div>
+    <label for="customRange3" class="form-label">Sleep Number</label>
+    <input
+      hx-get="/amount-slept-today"
+      hx-swap="innerHTML"
+      hx-trigger="change"
+      hx-target="#sleepOutput"
+      name="sleepKeeper"
+      id="sleepKeeper"
+      type="range"
+      class="form-range"
+      min="0"
+      max="8"
+      step="0.5"
+      id="customRange3"
+    />
+    <div id="sleepOutput">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 300 250"
+        width="300"
+        height="250"
+      >
+        <style>
+          :root {
+            --hours-slept: 4; /* Change this to a value between 0 and 24 */
+          }
+
+          .label {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            fill: #444;
+            text-anchor: middle;
+          }
+
+          .value {
+            font-size: 28px;
+            font-weight: bold;
+          }
+
+          .status {
+            font-size: 16px;
+            font-weight: bold;
+            fill: hsl(calc((var(--hours-slept) / 8) * 120), 80%, 45%);
+          }
+        </style>
+
+        <!-- Circle background -->
+        <circle
+          cx="150"
+          cy="125"
+          r="80"
+          fill="#f0f0f0"
+          stroke="#ccc"
+          stroke-width="10"
+        />
+
+        <!-- Dynamic arc for sleep -->
+        <circle
+          cx="150"
+          cy="125"
+          r="80"
+          fill="none"
+          stroke="hsl(calc((var(--hours-slept) / 8) * 120), 80%, 50%)"
+          stroke-width="10"
+          stroke-dasharray="calc((var(--hours-slept) / 8) * 502.65) 502.65"
+          stroke-linecap="round"
+          transform="rotate(-90 150 125)"
+        />
+
+        <!-- Sleep duration text -->
+        <text x="150" y="115" class="label value">
+          <tspan id="hours-slept-text">4</tspan>
+          hrs
+        </text>
+
+        <!-- Recommended text -->
+        <text x="150" y="145" class="label">of 8 hrs recommended</text>
+
+        <!-- Status -->
+        <text x="150" y="180" class="label status">
+          <tspan id="status-text">Sleep</tspan>
+        </text>
+      </svg>
+    </div>
+    <button
+      hx-get="/save-sleep-for-today"
+      hx-trigger="click"
+      hx-target="this"
+      hx-swap="innerHTML"
+      hx-include="[name='sleepKeeper']"
+      type="button"
+      class="btn btn-primary"
+    >
+      Save
+    </button>
+  </div>
+</div>
+<!-- End Sleep-->

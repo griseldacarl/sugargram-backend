@@ -1,0 +1,270 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DiaBuddy</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://unpkg.com/htmx.org@2.0.4"
+      integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <h1>DiaBuddy</h1>
+    <div class="game-container">
+      <div class="pantry">
+        <h2 class="pantry-title">Food Pantry</h2>
+        {% for food in foods %}
+        <div
+          class="food-item"
+          data-carbs="{{food.carbohydrates}}"
+          data-fat="{{food.fats}}"
+          data-protein="{{food.protein}}"
+          style="background-image: url({{food.image}})"
+          data-name="{{food.name}}"
+          title="{{food.name.replace('_', ' ').capitalize()}}"
+        ></div>
+        {% endfor %}
+
+        <div class="nutrition-info">
+          <p>
+            Drag food items from the pantry to the plate. Try to guess the total
+            nutritional values.
+          </p>
+        </div>
+      </div>
+
+      <div class="plate-container">
+        <div class="plate" id="plate"></div>
+
+        <div class="guess-form">
+          <div class="form-group">
+            <label for="carbs-guess">Guess Total Carbohydrates (g):</label>
+            <input type="number" id="carbs-guess" min="0" step="1" />
+          </div>
+          <div class="form-group">
+            <label for="fat-guess">Guess Total Fat (g):</label>
+            <input type="number" id="fat-guess" min="0" step="1" />
+          </div>
+          <div class="form-group">
+            <label for="protein-guess">Guess Total Protein (g):</label>
+            <input type="number" id="protein-guess" min="0" step="1" />
+          </div>
+          <button type="button" id="check-guess" class="btn btn-primary">
+            Check My Guess
+          </button>
+          <button type="button" id="clear-plate" class="btn btn-danger">
+            Clear Plate
+          </button>
+
+          <div class="results" id="results">
+            <h3>Results</h3>
+            <p>
+              Your guess: <span id="guess-carbs"></span>g carbs,
+              <span id="guess-fat"></span>g fat,
+              <span id="guess-protein"></span>g protein
+            </p>
+            <p>
+              Actual values: <span id="actual-carbs"></span>g carbs,
+              <span id="actual-fat"></span>g fat,
+              <span id="actual-protein"></span>g protein
+            </p>
+            <p>
+              Difference: <span id="diff-carbs" class="difference"></span>g
+              carbs, <span id="diff-fat" class="difference"></span>g fat,
+              <span id="diff-protein" class="difference"></span>g protein
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h1>Welcome {{user.displayName}}!</h1>
+    <p>Here is a game used to test your knowledge of food and nutrition!</p>
+
+    <script>
+      async function postDataToDatabase(guessData) {
+        const response = await fetch("/add-food-understanding-data", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(guessData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Success:", data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      document.addEventListener("DOMContentLoaded", (event) => {
+        const foodItems = document.querySelectorAll(".food-item");
+        const plate = document.getElementById("plate");
+        const checkGuessButton = document.getElementById("check-guess");
+        const clearPlateButton = document.getElementById("clear-plate");
+        const resultsDiv = document.getElementById("results");
+
+        // Nutritional totals
+        let totalCarbs = 0;
+        let totalFat = 0;
+        let totalProtein = 0;
+        let plateItemCount = 0;
+
+        // Add drag functionality to food items
+        foodItems.forEach((item) => {
+          item.setAttribute("draggable", true);
+
+          item.addEventListener("dragstart", function (e) {
+            e.dataTransfer.setData(
+              "text/plain",
+              JSON.stringify({
+                carbs: this.dataset.carbs,
+                fat: this.dataset.fat,
+                protein: this.dataset.protein,
+                image: this.style.backgroundImage,
+                name: this.dataset.name,
+              })
+            );
+          });
+        });
+
+        // Allow dropping on the plate
+        plate.addEventListener("dragover", function (e) {
+          e.preventDefault();
+        });
+
+        plate.addEventListener("drop", function (e) {
+          e.preventDefault();
+
+          const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+
+          // Create a new food item on the plate
+          const foodOnPlate = document.createElement("div");
+          foodOnPlate.className = "food-on-plate";
+          foodOnPlate.style.backgroundImage = data.image;
+          foodOnPlate.title = data.name.replace("/_/g", " ");
+
+          // Calculate position within the plate (random but not too close to edges)
+          const plateWidth = plate.offsetWidth;
+          const plateHeight = plate.offsetHeight;
+          const foodWidth = 60;
+          const foodHeight = 60;
+
+          const maxX = plateWidth - foodWidth;
+          const maxY = plateHeight - foodHeight;
+
+          // Calculate position to keep food within the circular plate
+          let validPosition = false;
+          let posX, posY;
+
+          while (!validPosition) {
+            posX = Math.floor(Math.random() * (maxX - 20)) + 10;
+            posY = Math.floor(Math.random() * (maxY - 20)) + 10;
+
+            // Check if within the circle
+            const centerX = plateWidth / 2;
+            const centerY = plateHeight / 2;
+            const radius = Math.min(plateWidth, plateHeight) / 2 - 10;
+
+            const distanceX = posX + foodWidth / 2 - centerX;
+            const distanceY = posY + foodHeight / 2 - centerY;
+            const distance = Math.sqrt(
+              distanceX * distanceX + distanceY * distanceY
+            );
+
+            if (distance <= radius) {
+              validPosition = true;
+            }
+          }
+
+          foodOnPlate.style.left = posX + "px";
+          foodOnPlate.style.top = posY + "px";
+
+          // Add a title attribute to show the food name on hover
+          foodOnPlate.title = data.name;
+
+          plate.appendChild(foodOnPlate);
+
+          // Update nutritional totals
+          totalCarbs += parseInt(data.carbs);
+          totalFat += parseInt(data.fat);
+          totalProtein += parseInt(data.protein);
+          plateItemCount++;
+
+          // Hide results when new food is added
+          resultsDiv.style.display = "none";
+        });
+
+        // Check guess button handler
+        checkGuessButton.addEventListener("click", async function () {
+          const carbsGuess =
+            parseInt(document.getElementById("carbs-guess").value) || 0;
+          const fatGuess =
+            parseInt(document.getElementById("fat-guess").value) || 0;
+          const proteinGuess =
+            parseInt(document.getElementById("protein-guess").value) || 0;
+
+          // Display results
+          document.getElementById("guess-carbs").textContent = carbsGuess;
+          document.getElementById("guess-fat").textContent = fatGuess;
+          document.getElementById("guess-protein").textContent = proteinGuess;
+
+          document.getElementById("actual-carbs").textContent = totalCarbs;
+          document.getElementById("actual-fat").textContent = totalFat;
+          document.getElementById("actual-protein").textContent = totalProtein;
+
+          document.getElementById("diff-carbs").textContent = Math.abs(
+            carbsGuess - totalCarbs
+          );
+          document.getElementById("diff-fat").textContent = Math.abs(
+            fatGuess - totalFat
+          );
+          document.getElementById("diff-protein").textContent = Math.abs(
+            proteinGuess - totalProtein
+          );
+
+          const GuessData = {
+            CarbohydrateError:
+              (Math.abs(carbsGuess - totalCarbs) / totalCarbs) * 100,
+            FatError: (Math.abs(fatGuess - totalFat) / totalFat) * 100,
+            ProteinError:
+              (Math.abs(proteinGuess - totalProtein) / totalProtein) * 100,
+          };
+          console.log(GuessData);
+          await postDataToDatabase(GuessData);
+          resultsDiv.style.display = "block";
+        });
+
+        // Clear plate button handler
+        clearPlateButton.addEventListener("click", function () {
+          // Remove all food items from plate
+          while (plate.firstChild) {
+            plate.removeChild(plate.firstChild);
+          }
+
+          // Reset nutritional totals
+          totalCarbs = 0;
+          totalFat = 0;
+          totalProtein = 0;
+          plateItemCount = 0;
+
+          // Hide results
+          resultsDiv.style.display = "none";
+        });
+      });
+    </script>
+  </body>
+</html>

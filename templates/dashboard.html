@@ -1,0 +1,36 @@
+<ul class="list-group list-group-flush w-100">
+  <li class="list-group-item">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>Holy guacamole!</strong> Check out our New Game? This can help us
+      understand you better?
+      <div class="icon">
+        <span class="material-icons-outlined">casino</span>
+        <p><a href="{{url_for('game')}}">DiaBuddy</a></p>
+      </div>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div
+      hx-get="/calories-summary-dashboard"
+      hx-swap="innerHTML"
+      hx-trigger="load"
+    >
+      Loading remaining calories....
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div
+      hx-get="/weight-summary-dashboard"
+      hx-swap="innerHTML"
+      hx-trigger="load"
+    >
+      Loading remaining calories....
+    </div>
+  </li>
+</ul>

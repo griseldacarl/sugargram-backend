@@ -1,0 +1,23 @@
+<form
+  hx-post="/predict-add-food"
+  hx-encoding="multipart/form-data"
+  hx-target="this"
+  hx-swap="outerHTML"
+>
+  <fieldset>
+    <legend>Take a picture of the food</legend>
+
+    <div class="input-group mb-3">
+      <input
+        type="file"
+        class="form-control"
+        id="predictionFileInput"
+        name="imagefile"
+        accept="image/*"
+      />
+      <label class="input-group-text" for="predictionFileInput">Upload</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </fieldset>
+</form>

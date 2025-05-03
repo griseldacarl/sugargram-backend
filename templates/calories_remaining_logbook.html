@@ -1,0 +1,52 @@
+<div class="card" style="width: 100%">
+  <div class="card-body">
+    <h5 class="card-title">Your Calories for the day!</h5>
+    <h6 class="card-subtitle mb-2 text-body-secondary">
+      Calories {{calories}}
+    </h6>
+    <p class="card-text">Date: {{date}}</p>
+    <span
+      hx-target="#breakfastlogbook"
+      hx-get="/breakfast-list-logbook"
+      hx-trigger="load"
+      hx-swap="innerHTML"
+    ></span>
+    <span
+      hx-target="#lunchlogbook"
+      hx-get="/lunch-list-logbook"
+      hx-trigger="load"
+      hx-swap="innerHTML"
+    ></span>
+    <span
+      hx-target="#dinnerlogbook"
+      hx-get="/dinner-list-logbook"
+      hx-trigger="load"
+      hx-swap="innerHTML"
+    ></span>
+    <span
+      hx-target="#snacklogbook"
+      hx-get="/snack-list-logbook"
+      hx-trigger="load"
+      hx-swap="innerHTML"
+    ></span>
+
+    <button
+      hx-get="/calories-remaining-logbook/{{yesterday}}"
+      hx-target=".card"
+      hx-swap="outerHTML"
+      type="button"
+      class="btn btn-primary"
+    >
+      Previous
+    </button>
+    <button
+      hx-get="/calories-remaining-logbook/{{tomorrow}}"
+      hx-target=".card"
+      hx-swap="outerHTML"
+      type="button"
+      class="btn btn-primary"
+    >
+      Next
+    </button>
+  </div>
+</div>
