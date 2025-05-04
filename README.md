@@ -16,6 +16,8 @@ Flask services.
 ## DiaBuddy
 [Diabuddy](http://147.182.203.196:5000/DiaBuddy)
 
+![Dialog](Dialog.jpg "Launcher")
+
 To access the DiaBuddy, you must first Sign In to the Dialog (Diabetic Logger). There is a link at the top of the home screen of the 
 Dialog application. If you try to go directly, it should redirect you back to the login in screen of the Dialog application.
 
