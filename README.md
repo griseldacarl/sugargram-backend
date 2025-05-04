@@ -28,3 +28,7 @@ Dialog application. If you try to go directly, it should redirect you back to th
 
 The Dialog application is a major entry point into my project. This application will allow the user to log most of the data needed to develop the
 user profile. Please follow the link above or type 147.182.203.196:5000/SignIn in a browser.  Once you are logged in, it should look like this:
+
+![Dialog](diabetictoollog.jpg "Dialog Internal")
+
+
