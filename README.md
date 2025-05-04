@@ -3,6 +3,11 @@ Sugagram Backend
 
 # Flask Server
 
+Please use one of the following email addresses to use the applications:
+- griseldacarl@gmail.com
+- grizzymitchell@gmail.com
+- car2200905@maricopa.edu
+
 ## Launcher
 [Launcher](http://147.182.203.196:5000/)
 
