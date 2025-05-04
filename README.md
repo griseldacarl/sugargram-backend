@@ -6,6 +6,8 @@ Sugagram Backend
 ## Launcher
 [Launcher](http://147.182.203.196:5000/)
 
+![Launcher](Launch.jpg "Launcher")
+
 ## DiaBuddy
 [Diabuddy](http://147.182.203.196:5000/DiaBuddy)
 
